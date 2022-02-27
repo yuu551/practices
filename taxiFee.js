@@ -34,6 +34,7 @@ const distances = [
 const ROUTE = 0
 const ROUTE_DISTANCE = 1
 const ADD_FEE = 2
+const INTER_DISTANCE = 200
 
 const taxiFee = (input) => {
   const routes = getRoutes(input);
@@ -54,25 +55,25 @@ const taxiFee = (input) => {
       taxiFeeInfo.totalFee += fromCityInfo.firstFee;
       if (fromCityInfo.firstLen <= distance[ROUTE_DISTANCE]) {
         taxiFeeInfo.totalFee += distance[ADD_FEE];
-        const meterCount =  Math.floor((distance[ROUTE_DISTANCE] - fromCityInfo.firstLen) / 200)
+        const meterCount =  Math.floor((distance[ROUTE_DISTANCE] - fromCityInfo.firstLen) / INTER_DISTANCE)
         taxiFeeInfo.totalFee += meterCount * distance[ADD_FEE];
-        taxiFeeInfo.rest = distance[ROUTE_DISTANCE] - fromCityInfo.firstLen - (meterCount * 200)
+        taxiFeeInfo.rest = distance[ROUTE_DISTANCE] - fromCityInfo.firstLen - (meterCount * INTER_DISTANCE)
       }
       taxiFeeInfo.firstCityInfo = fromCityInfo;
       taxiFeeInfo.totalLength += distance[ROUTE_DISTANCE];
       return;
     }
     if (taxiFeeInfo.firstCityInfo.firstLen <= taxiFeeInfo.totalLength) {
-      const meterCount = Math.floor((distance[ROUTE_DISTANCE] + restLength) / 200)
+      const meterCount = Math.floor((distance[ROUTE_DISTANCE] + restLength) / INTER_DISTANCE)
       taxiFeeInfo.totalFee += meterCount * distance[ADD_FEE];
-      taxiFeeInfo.rest = (distance[ROUTE_DISTANCE] + restLength) - meterCount * 200
+      taxiFeeInfo.rest = (distance[ROUTE_DISTANCE] + restLength) - meterCount * INTER_DISTANCE
     } 
     else if (taxiFeeInfo.firstCityInfo.firstLen <= taxiFeeInfo.totalLength + distance[ROUTE_DISTANCE]) {
       // 最初に足し算する。
       taxiFeeInfo.totalFee += distance[ADD_FEE];
-      const meterCount = Math.floor((taxiFeeInfo.totalLength +distance[ROUTE_DISTANCE] - taxiFeeInfo.firstCityInfo.firstLen) /200)
+      const meterCount = Math.floor((taxiFeeInfo.totalLength +distance[ROUTE_DISTANCE] - taxiFeeInfo.firstCityInfo.firstLen) /INTER_DISTANCE)
       taxiFeeInfo.totalFee += meterCount * distance[ADD_FEE];
-      taxiFeeInfo.rest = taxiFeeInfo.totalLength + distance[ROUTE_DISTANCE] - taxiFeeInfo.firstCityInfo.firstLen - (200 * meterCount)
+      taxiFeeInfo.rest = taxiFeeInfo.totalLength + distance[ROUTE_DISTANCE] - taxiFeeInfo.firstCityInfo.firstLen - (INTER_DISTANCE * meterCount)
     }
     taxiFeeInfo.totalLength += distance[ROUTE_DISTANCE];
   });
